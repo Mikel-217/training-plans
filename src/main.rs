@@ -1,8 +1,10 @@
+#![allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::fs::{create_dir, read_dir, File, ReadDir};
 use std::path::Path;
-
+use std::io;
+mod plans;
 
 #[derive(Serialize, Deserialize)]
 struct Exersice {
@@ -11,7 +13,7 @@ struct Exersice {
     Duration: i16
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Deserialize)]
 struct Plan {
     Name: String,
     Exercises: Vec<Exersice>,
@@ -21,7 +23,11 @@ struct Plan {
 fn main() {
     startup();
     println!("Hello, which plan may it be for you today? Select one :)");
-    
+    let plans = get_plans();
+    for value in plans {
+        println!("{value}");
+    }
+
 }
 
 fn startup() {
@@ -30,12 +36,12 @@ fn startup() {
     let planpath = r"C:\trainingsplan\plans";
 
     if Path::new(parentpath).exists() && Path::new(exersicepath).exists() && Path::new(planpath).exists() {
-        get_plans();
+        // get_plans();
     } else {
         create_dir(parentpath).expect("Cannot Create Directory");
         create_dir(exersicepath).expect("Cannot Create Directory");
         create_dir(planpath).expect("Cannot Create Directory");
-        create_plans();
+        plans::create_plans();
     }
 
 }
@@ -52,8 +58,6 @@ fn get_plans() -> Vec<String> {
     plans
 }
 
-fn create_plans() {
-    println!("I work :D");
-}
+
 
 
